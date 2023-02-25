@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:return_goods/common/colors/colors.dart';
 import 'custom_appbar.dart';
 
 class BaseScaffold extends Scaffold {
@@ -24,9 +25,9 @@ class BaseScaffold extends Scaffold {
                 actions: actions ?? [],
                 centerTitle: centerTitle,
                 title: MyTitle(title ?? '', color: titleColor ?? Colors.grey[800]),
-                backgroundColor: appBarBackgroundColor,
+                backgroundColor: appBarBackgroundColor
               ),
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.primaryBackground,
           body: body,
           floatingActionButton: floatingActionButton,
           floatingActionButtonLocation: floatingActionButtonLocation,

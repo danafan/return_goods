@@ -6,6 +6,7 @@ import 'package:return_goods/pages/home/home_controller.dart';
 import 'package:return_goods/common/colors/colors.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:return_goods/router/app_pages.dart';
 
 class HomePage extends GetView<HomeController> {
   HomePage({Key? key}) : super(key: key);
@@ -26,7 +27,11 @@ class HomePage extends GetView<HomeController> {
             _pageTop(),
             SizedBox(height: 14.h),
             //打包
-            _menuItem('package_icon', '打包'),
+            GestureDetector(
+              onTap: () => Get.toNamed(AppRoutes.Package),
+              child: _menuItem('package_icon', '打包'),
+            ),
+            
             SizedBox(height: 14.h),
             //批量打包
             _menuItem('all_package', '批量打包'),

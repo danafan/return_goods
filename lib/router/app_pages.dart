@@ -1,6 +1,8 @@
 import 'package:return_goods/pages/Index/Index_view.dart';
 import 'package:return_goods/pages/home/home.binding.dart';
 import 'package:return_goods/pages/home/home_view.dart';
+import 'package:return_goods/pages/package/package_binding.dart';
+import 'package:return_goods/pages/package/package_view.dart';
 import 'package:return_goods/pages/login/login_binding.dart';
 import 'package:return_goods/pages/login/login_view.dart';
 import 'package:return_goods/pages/notfound/notfound_view.dart';
@@ -25,6 +27,11 @@ class AppPages {
       name: AppRoutes.Home,
       page: () => HomePage(),
       binding: HomeBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.Package,
+      page: () => PackagePage(),
+      binding: PackageBinding(),
     ),
   ];
 
