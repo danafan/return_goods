@@ -1,9 +1,31 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PackageController extends GetxController {
-  final count = 0.obs;
 
-  String userName = 'burnish';
+  //输入框controller
+  final codeController = new TextEditingController();
+
+  //订单列表
+  List<Map> orderList = [
+    {'ww': 'ww'},
+    {'ww': 'ww'},
+    {'ww': 'ww'},
+    {'ww': 'ww'},
+    {'ww': 'ww'},
+    {'ww': 'ww'},
+    {'ww': 'ww'},
+    {'ww': 'ww'},
+    {'ww': 'ww'},
+    {'ww': 'ww'},
+    {'ww': 'ww'},
+    {'ww': 'ww'},
+    {'ww': 'ww'},
+    {'ww': 'ww'},
+    {'ww': 'ww'},
+    {'ww': 'ww'},
+    {'ww': 'ww'}
+  ];
 
   @override
   void onInit() {
@@ -17,10 +39,10 @@ class PackageController extends GetxController {
   @override
   void onClose() {}
 
-  void increment() => count.value++;
+  // void increment() => count.value++;
 
-  void changeUserName() {
-    userName = 'juefei';
-    update();
-  }
+  // void changeUserName() {
+  //   userName = 'juefei';
+  //   update();
+  // }
 }

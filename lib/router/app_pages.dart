@@ -3,6 +3,8 @@ import 'package:return_goods/pages/home/home.binding.dart';
 import 'package:return_goods/pages/home/home_view.dart';
 import 'package:return_goods/pages/package/package_binding.dart';
 import 'package:return_goods/pages/package/package_view.dart';
+import 'package:return_goods/pages/scan/scan_binding.dart';
+import 'package:return_goods/pages/scan/scan_view.dart';
 import 'package:return_goods/pages/login/login_binding.dart';
 import 'package:return_goods/pages/login/login_view.dart';
 import 'package:return_goods/pages/notfound/notfound_view.dart';
@@ -32,6 +34,11 @@ class AppPages {
       name: AppRoutes.Package,
       page: () => PackagePage(),
       binding: PackageBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.Scan,
+      page: () => ScanPage(),
+      binding: ScanBinding(),
     ),
   ];
 

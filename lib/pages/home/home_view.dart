@@ -31,7 +31,6 @@ class HomePage extends GetView<HomeController> {
               onTap: () => Get.toNamed(AppRoutes.Package),
               child: _menuItem('package_icon', '打包'),
             ),
-            
             SizedBox(height: 14.h),
             //批量打包
             _menuItem('all_package', '批量打包'),

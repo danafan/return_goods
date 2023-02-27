@@ -58,6 +58,9 @@ dependencies:
   # 上拉刷新/下拉加载
   pull_to_refresh: ^2.0.0
 
+  # 扫码
+  # qr_code_scanner: ^1.0.1
+
   # webview
   # webview_flutter: ^2.0.8
 

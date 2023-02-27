@@ -5,24 +5,14 @@ import 'package:return_goods/pages/package/package_controller.dart';
 import 'package:return_goods/common/colors/colors.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:return_goods/router/app_pages.dart';
 
 class PackagePage extends GetView<PackageController> {
   PackagePage({Key? key}) : super(key: key);
 
-  //输入框controller
-  final _codeController = new TextEditingController();
-
-  //订单列表
-  List<Map> orderList = [{'ww':'ww'}];
-  //是否加载
-  bool _isLoad = false;
-  //所有数据加载完毕
-  bool _isOver = false;
-  ScrollController _scrollController = new ScrollController();
-
-
   @override
   Widget build(BuildContext context) {
+    PackageController _packageController = Get.put(PackageController());
     return BaseScaffold(
       appBar: MyAppBar(
         centerTitle: true,
@@ -32,7 +22,7 @@ class PackagePage extends GetView<PackageController> {
       body: Column(
         children: [
           //顶部输入框和扫码按钮
-          _topScan(_codeController),
+          _topScan(_packageController.codeController),
           SizedBox(height: 6.h),
           Expanded(
               flex: 1,
@@ -54,27 +44,15 @@ class PackagePage extends GetView<PackageController> {
                     ),
                     Expanded(
                         flex: 1,
-                        child: Container(
-                          color: AppColors.primaryColor,
-                          child: RefreshIndicator(
-                            onRefresh: onRefresh,
-                            child: ListView.builder(
-                                padding: EdgeInsets.all(8),
-                                controller: this._scrollController,
-                                itemCount: this.orderList.length + 1,
-                                itemBuilder: (context, index) {
-                                  if (index < this.orderList.length) {
-                                    return _goodsItem();
-                                  } else {
-                                    if (this._isLoad) {
-                                      return _loadingMore();
-                                    } else {
-                                      return _listBottom();
-                                    }
-                                  }
-                                }),
-                          ),
-                        ))
+                        child: ListView.builder(
+                            itemCount: _packageController.orderList.length + 1,
+                            itemBuilder: (context, index) {
+                              if (index < _packageController.orderList.length) {
+                                return _goodsItem();
+                              } else {
+                                return _listBottom();
+                              }
+                            }))
                   ],
                 ),
               )),
@@ -87,28 +65,8 @@ class PackagePage extends GetView<PackageController> {
   }
 }
 
-//加载更多数据
-  Future loadMoreData() {
-    return Future.delayed(Duration(seconds: 3), () {
-      print('加载更多');
-      // List<Map> newsList = [{'orderStatus':'1'},{'orderStatus':'2'},{'orderStatus':'3'}];
-      // setState(() {
-      //   this._isLoad = false;
-      //   this.orderList.addAll(newsList);
-      // });
-    });
-  }
-
-  //下拉刷新
-  Future onRefresh() {
-    return Future.delayed(Duration(seconds: 1), () {
-      print('当前已是最新数据');
-    });
-  }
-
-
 //顶部输入框和扫码按钮
-_topScan(_codeController) {
+_topScan(codeController) {
   return Container(
       color: AppColors.primaryWhite,
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
@@ -126,7 +84,12 @@ _topScan(_codeController) {
                     borderRadius: BorderRadius.circular(15.h)),
                 constraints: BoxConstraints(minHeight: 30.h, maxHeight: 30.h),
                 child: TextField(
-                  controller: _codeController,
+                  autofocus: true,
+                  textInputAction: TextInputAction.send,
+                  onSubmitted: (value) {
+                    print(codeController.text);
+                  },
+                  controller: codeController,
                   style:
                       TextStyle(color: AppColors.primaryText, fontSize: 12.sp),
                   cursorColor: AppColors.primaryDark,
@@ -144,33 +107,58 @@ _topScan(_codeController) {
                 ),
               )),
           SizedBox(width: 12.w),
-          Image(
-            image: AssetImage('images/scan_icon.png'),
-            width: 20.w,
-            height: 20.h,
+          GestureDetector(
+            onTap: () => Get.toNamed(AppRoutes.Scan),
+            child: Image(
+              image: AssetImage('images/scan_icon.png'),
+              width: 20.w,
+              height: 20.h,
+            ),
           ),
         ],
       ));
 }
 
-
 //某一个商品
-_goodsItem(){
+_goodsItem() {
   return Container(
-    child: Text('这是商品'),
-  );
-}
-//正在加载组件
-_loadingMore(){
-  return Container(
-    child: Text('加载更多'),
+    color: AppColors.primaryWhite,
+    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          '这是商品',
+          style: TextStyle(fontSize: 14.sp, color: AppColors.primaryText),
+        ),
+        Row(
+          children: [
+            Text('6',
+                style:
+                    TextStyle(fontSize: 14.sp, color: AppColors.primaryDark)),
+            SizedBox(width: 2.w),
+            Container(
+              width: 5.w,
+              height: 5.w,
+              decoration: BoxDecoration(
+                  color: Color(0xFFFF0000),
+                  borderRadius: BorderRadius.circular(2.5.w)),
+            )
+          ],
+        )
+      ],
+    ),
   );
 }
 
 //列表底部组件
-_listBottom(){
+_listBottom() {
   return Container(
-    child: Text('底部'),
+    alignment: Alignment.center,
+    child: Text(
+      '到底了~',
+      style: TextStyle(color: AppColors.primaryDark, fontSize: 12.sp),
+    ),
   );
 }
 
@@ -203,20 +191,86 @@ _bottomBox() {
               ),
             ),
             SizedBox(width: 8.w),
-            Container(
-              width: 94.w,
-              height: 32.h,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: AppColors.primaryColor,
-                  border: Border.all(color: AppColors.primaryColor),
-                  borderRadius: BorderRadius.circular(16.h)),
-              child: Text(
-                '完成打包',
-                style:
-                    TextStyle(fontSize: 14.sp, color: AppColors.primaryWhite),
-              ),
-            )
+            GestureDetector(
+                onTap: () => {
+                      Get.defaultDialog(
+                          title: '确认包裹信息',
+                          titleStyle: TextStyle(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primaryText),
+                          actions:<Widget>[
+                            Text('data')
+                          ],
+                          content: Container(
+                            width: double.infinity,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('供应商：请选择'),
+                                SizedBox(height: 8.h),
+                                Text('仓库：请选择'),
+                                SizedBox(height: 8.h),
+                                Text('包裹号码：请选择',
+                                    style: TextStyle(
+                                        fontSize: 14.sp,
+                                        color: AppColors.primaryText)),
+                                SizedBox(height: 8.h),
+                                Text('商品件数：请选择',
+                                    style: TextStyle(
+                                        fontSize: 14.sp,
+                                        color: AppColors.primaryText)),
+                                SizedBox(height: 8.h),
+                                Text('打包日期：请选择',
+                                    style: TextStyle(
+                                        fontSize: 14.sp,
+                                        color: AppColors.primaryText)),
+                                SizedBox(height: 8.h),
+                                Text('打包人：请选择',
+                                    style: TextStyle(
+                                        fontSize: 14.sp,
+                                        color: AppColors.primaryText)),
+                                SizedBox(height: 8.h),
+                                Text('备注：请选择'),
+                                SizedBox(height: 15.h),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: 110.w,
+                                      height: 30.h,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15.h),
+                                        color: AppColors.primaryColor
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '确认打包',
+                                        style: TextStyle(
+                                            color: AppColors.primaryWhite,
+                                            fontSize: 14.sp),
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ))
+                    },
+                child: Container(
+                  width: 94.w,
+                  height: 32.h,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: AppColors.primaryColor,
+                      border: Border.all(color: AppColors.primaryColor),
+                      borderRadius: BorderRadius.circular(16.h)),
+                  child: Text(
+                    '完成打包',
+                    style: TextStyle(
+                        fontSize: 14.sp, color: AppColors.primaryWhite),
+                  ),
+                )),
           ],
         )
       ],
